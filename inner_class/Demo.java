@@ -17,13 +17,17 @@ class A{
 
 class Demo{
     public static void main(String[] args) {
-            A a = new A();
+            A a = new A(){
+                public void show(){
+                    System.out.println("Fuck you bitch");
+                }
+            };
             a.show();
 
-            A.B aa = a.new B();
-            aa.config();
+            // A.B aa = a.new B();
+            // aa.config();
 
-            A.C cc = new A.C();
-            cc.configC();
+            // A.C cc = new A.C();
+            // cc.configC();
     }
 }
