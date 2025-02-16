@@ -6,7 +6,7 @@ public class Question {
     private String opt3;
     private String opt4;
     private String answer;
-
+    private String userEnterAnswer; 
         
     public Question(int id, String question, String opt1, String opt2, String opt3, String opt4, String answer) {
         this.id = id;
@@ -16,6 +16,19 @@ public class Question {
         this.opt3 = opt3;
         this.opt4 = opt4;
         this.answer = answer;
+    }
+    public void displayTheAnswer(){
+        System.out.println("The ansnwer "+id +" : " + answer + "=> That is " + checkTheAnswer());
+    }
+    private String checkTheAnswer(){
+        return answer.equals(userEnterAnswer) ? "Correct!":"Incorrect!";
+    }
+   
+    public void setUserEnterAnswer (String answer){
+        userEnterAnswer = answer;
+    }
+    public String getUserEnterAnswer (){
+        return userEnterAnswer;
     }
     public int getId() {
         return id;

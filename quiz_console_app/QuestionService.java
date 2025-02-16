@@ -19,14 +19,27 @@ public class QuestionService {
             System.out.println(item.getOpt2());
             System.out.println(item.getOpt3());
             System.out.println(item.getOpt4());
+            System.out.print("Enter you answer: ");
             Scanner sc = new Scanner(System.in);
             selection[i] = sc.nextLine();
+            item.setUserEnterAnswer(selection[i]);
             i++;
         }
         System.out.println("This below your answer");
         System.out.println("---------------------------");
-        for(String s:selection){
-            System.out.println(s);
+        for(Question item : questions){
+            item.displayTheAnswer();
         }
+        
+       
+    }
+
+    public void PrintScore (){
+        int score =0;
+        for(Question item : questions){
+            if(item.getAnswer().equals(item.getUserEnterAnswer())) score++;
+        }
+        System.out.println("---------Score---------");
+        System.out.println(score+"/"+questions.length);
     }
 }
