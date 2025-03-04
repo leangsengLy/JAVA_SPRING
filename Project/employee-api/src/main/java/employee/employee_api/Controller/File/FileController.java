@@ -1,10 +1,8 @@
 package employee.employee_api.Controller.File;
 
-import employee.employee_api.Dto.File.FileUploadRequest;
-import employee.employee_api.Dto.File.FileUploadResponse;
 import employee.employee_api.Global.GlobalHelper;
-import employee.employee_api.Service.Implement.File.FileUploadImpl;
-import employee.employee_api.Service.Interface.FileService;
+import employee.employee_api.Service.Implement.File.FileService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 
 @Validated
 @RestController
 @RequestMapping("api/upload/file")
 public class FileController {
+    @Autowired
+    private  FileService fileService;
     @PostMapping(value = "upload",consumes = MediaType.MULTIPART_FORM_DATA_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
      public ResponseEntity<?> handleUploadFile(@RequestParam("file") MultipartFile file) {
         try{
@@ -32,5 +31,14 @@ public class FileController {
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+     }
+     @PostMapping(value = "image")
+     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
+         try {
+             fileService.UploadFile(file);
+             return ResponseEntity.ok("upload successfuly. "+file.getOriginalFilename());
+         }catch (Exception e){
+             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+         }
      }
 }
