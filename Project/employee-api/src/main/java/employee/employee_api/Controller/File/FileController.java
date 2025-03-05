@@ -25,7 +25,6 @@ public class FileController {
      public ResponseEntity<?> handleUploadFile(@RequestParam("file") MultipartFile file) {
         try{
             String fileName = file.getOriginalFilename();
-//            file.transferTo(new File("C:\\Users\\TUF\\Desktop\\UploadImage\\"+fileName));
             file.transferTo(new File(GlobalHelper.pathFolderImage +fileName));
             return ResponseEntity.ok("upload successfuly");
         }catch (Exception e){
@@ -36,6 +35,8 @@ public class FileController {
      public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
          try {
              fileService.UploadFile(file);
+             String fileName = file.getOriginalFilename();
+             file.transferTo(new File(GlobalHelper.pathFolderImage +fileName));
              return ResponseEntity.ok("upload successfuly. "+file.getOriginalFilename());
          }catch (Exception e){
              return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

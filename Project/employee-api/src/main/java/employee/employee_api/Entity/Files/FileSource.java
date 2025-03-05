@@ -22,4 +22,7 @@ public class FileSource {
     @Lob
     private byte[] data;
     private LocalDateTime uploadedAt;
+    private String typeImage;
+    private String pathImage;
+    private Long reffererId;
 }

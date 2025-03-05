@@ -1,6 +1,7 @@
 package employee.employee_api.Service.Implement.File;
 
 import employee.employee_api.Entity.Files.FileSource;
+import employee.employee_api.Global.GlobalHelper;
 import employee.employee_api.Repository.File.FilesSourceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,9 @@ public class FileService  {
         newFileSource.setData(file.getBytes());
         newFileSource.setFileName(file.getOriginalFilename());
         newFileSource.setUploadedAt(LocalDateTime.now());
+        newFileSource.setFileType(newFileSource.getFileType());
+        newFileSource.setReffererId(newFileSource.getReffererId());
+        newFileSource.setPathImage(GlobalHelper.localUrl+"/"+newFileSource.getFileName());
         return filesSourceRepository.save(newFileSource);
     }
 }
