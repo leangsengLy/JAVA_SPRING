@@ -48,6 +48,7 @@ public class FileController {
              return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
          }
      }
+
 //     @PostMapping("image/multi")
 //     public ResponseEntity<?> uploadMultipartFile(@RequestParam("file") MultipartFile[] file) {
 //        try {
@@ -79,7 +80,7 @@ public class FileController {
 //            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 //        }
 //     }
-
+//    from Ai
     @PostMapping("image/multi")
     public ResponseEntity<?> uploadMultipartFile(@RequestParam("file") MultipartFile[] files) {
         try {
