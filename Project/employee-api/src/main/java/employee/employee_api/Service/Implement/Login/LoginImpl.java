@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class LoginImpl implements LoginService {
-
-
     private LoginRepository loginRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;

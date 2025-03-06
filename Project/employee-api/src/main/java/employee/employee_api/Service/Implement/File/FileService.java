@@ -25,4 +25,16 @@ public class FileService  {
         newFileSource.setPathImage(GlobalHelper.localUrl+"/"+newFileSource.getFileName());
         return filesSourceRepository.save(newFileSource);
     }
+    public FileSource UploadMultiFile(MultipartFile file) throws IOException {
+        FileSource newFileSource = new FileSource();
+        newFileSource.setFileName(file.getOriginalFilename());
+        newFileSource.setFileType(file.getContentType());
+        newFileSource.setData(file.getBytes());
+        newFileSource.setFileName(file.getOriginalFilename());
+        newFileSource.setUploadedAt(LocalDateTime.now());
+        newFileSource.setFileType(newFileSource.getFileType());
+        newFileSource.setReffererId(newFileSource.getReffererId());
+        newFileSource.setPathImage(GlobalHelper.localUrl+"/"+newFileSource.getFileName());
+        return filesSourceRepository.save(newFileSource);
+    }
 }
