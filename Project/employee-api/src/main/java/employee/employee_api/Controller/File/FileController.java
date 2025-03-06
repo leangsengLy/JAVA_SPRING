@@ -49,104 +49,92 @@ public class FileController {
          }
      }
 
-//     @PostMapping("image/multi")
-//     public ResponseEntity<?> uploadMultipartFile(@RequestParam("file") MultipartFile[] file) {
-//        try {
-//            if(file.length > 0){
-//               for (MultipartFile file1 : file) {
-//                   try {
-//                       // Validate file
-//                       if (file1.isEmpty()) {
-//                           continue;
-//                       }
-//
-//                       // Get original filename and validate
-//                       String fileName = file1.getOriginalFilename();
-//                       if (fileName == null || fileName.trim().isEmpty()) {
-//                           continue;
-//                       }
-//                       String uploadPath = GlobalHelper.pathFolderImage + fileName;
-//                       File destinationFile = new File(uploadPath);
-//                       destinationFile.getParentFile().mkdirs();
-//                       file1.transferTo(destinationFile);
-//                       fileService.UploadMultiFile(file1);
-//                   } catch (IOException e) {
-//                       throw new RuntimeException(e);
-//                   }
-//               }
-//                return ResponseEntity.ok("upload successfuly");
-//            }else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }catch (Exception e){
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-//        }
-//     }
-//    from Ai
-    @PostMapping("image/multi")
-    public ResponseEntity<?> uploadMultipartFile(@RequestParam("file") MultipartFile[] files) {
+     @PostMapping("image/multi")
+     public ResponseEntity<?> uploadMultipartFile(@RequestParam("file") MultipartFile[] file) {
         try {
-            // Check if files array is empty or null
-            if (files == null || files.length == 0) {
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .body(new ApiResponse(HttpStatus.NOT_FOUND.value(), "No files provided for upload"));
-            }
-
-            List<String> uploadedFiles = new ArrayList<>();
-            List<String> failedFiles = new ArrayList<>();
-
-            // Process each file
-            for (MultipartFile file : files) {
-                try {
-                    // Validate file
-                    if (file.isEmpty()) {
-                        failedFiles.add("Empty file received");
-                        continue;
-                    }
-
-                    // Get original filename and validate
-                    String fileName = file.getOriginalFilename();
-                    if (fileName == null || fileName.trim().isEmpty()) {
-                        failedFiles.add("File with no name received");
-                        continue;
-                    }
-
-                    // Sanitize filename (optional but recommended)
-                    fileName = System.currentTimeMillis() + "_" + fileName; // Adding timestamp to avoid duplicates
-
-                    // Save file to destination
-                    String uploadPath = GlobalHelper.pathFolderImage + fileName;
-                    File destinationFile = new File(uploadPath);
-
-                    // Create directory if it doesn't exist
-                    destinationFile.getParentFile().mkdirs();
-
-                    file.transferTo(destinationFile);
-                    fileService.UploadMultiFile(file); // Assuming this service method exists
-
-                    uploadedFiles.add(fileName);
-
-                } catch (IOException e) {
-                    failedFiles.add(file.getOriginalFilename() + ": " + e.getMessage());
-                }
-            }
-
-            // Prepare response
-            if (uploadedFiles.isEmpty() && !failedFiles.isEmpty()) {
-                return ResponseEntity
-                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "All file uploads failed"));
-            }
-
-            String message = "Files uploaded successfully: " + uploadedFiles.size() +
-                    (failedFiles.isEmpty() ? "" : ", Failed: " + failedFiles.size());
-
-            return ResponseEntity
-                    .ok(new ApiResponse(HttpStatus.BAD_REQUEST.value(), message));
-
-        } catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Upload failed: " + e.getMessage()));
+            if(file.length > 0){
+               for (MultipartFile file1 : file) {
+                   try {
+                       fileService.UploadMultiFile(file1);
+                       String fileName = file1.getOriginalFilename();
+                       file1.transferTo(new File(GlobalHelper.pathFolderImage + fileName));
+                   } catch (IOException e) {
+                       throw new RuntimeException(e);
+                   }
+               }
+                return ResponseEntity.ok("upload successfuly");
+            }else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }
+     }
+//    from Ai
+//    @PostMapping("image/multi")
+//    public ResponseEntity<?> uploadMultipartFile(@RequestParam("file") MultipartFile[] files) {
+//        try {
+//            // Check if files array is empty or null
+//            if (files == null || files.length == 0) {
+//                return ResponseEntity
+//                        .status(HttpStatus.BAD_REQUEST)
+//                        .body(new ApiResponse(HttpStatus.NOT_FOUND.value(), "No files provided for upload"));
+//            }
+//
+//            List<String> uploadedFiles = new ArrayList<>();
+//            List<String> failedFiles = new ArrayList<>();
+//
+//            // Process each file
+//            for (MultipartFile file : files) {
+//                try {
+//                    // Validate file
+//                    if (file.isEmpty()) {
+//                        failedFiles.add("Empty file received");
+//                        continue;
+//                    }
+//
+//                    // Get original filename and validate
+//                    String fileName = file.getOriginalFilename();
+//                    if (fileName == null || fileName.trim().isEmpty()) {
+//                        failedFiles.add("File with no name received");
+//                        continue;
+//                    }
+//
+//                    // Sanitize filename (optional but recommended)
+//                    fileName = System.currentTimeMillis() + "_" + fileName; // Adding timestamp to avoid duplicates
+//
+//                    // Save file to destination
+//                    String uploadPath = GlobalHelper.pathFolderImage + fileName;
+//                    File destinationFile = new File(uploadPath);
+//
+//                    // Create directory if it doesn't exist
+//                    destinationFile.getParentFile().mkdirs();
+//
+//                    file.transferTo(destinationFile);
+//                    fileService.UploadMultiFile(file); // Assuming this service method exists
+//
+//                    uploadedFiles.add(fileName);
+//
+//                } catch (IOException e) {
+//                    failedFiles.add(file.getOriginalFilename() + ": " + e.getMessage());
+//                }
+//            }
+//
+//            // Prepare response
+//            if (uploadedFiles.isEmpty() && !failedFiles.isEmpty()) {
+//                return ResponseEntity
+//                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                        .body(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "All file uploads failed"));
+//            }
+//
+//            String message = "Files uploaded successfully: " + uploadedFiles.size() +
+//                    (failedFiles.isEmpty() ? "" : ", Failed: " + failedFiles.size());
+//
+//            return ResponseEntity
+//                    .ok(new ApiResponse(HttpStatus.BAD_REQUEST.value(), message));
+//
+//        } catch (Exception e) {
+//            return ResponseEntity
+//                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Upload failed: " + e.getMessage()));
+//        }
+//    }
 }

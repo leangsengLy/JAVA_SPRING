@@ -1,6 +1,7 @@
 package employee.employee_api.Exception;
 
 import lombok.*;
+import org.springframework.http.HttpStatusCode;
 
 @Setter
 @Getter
