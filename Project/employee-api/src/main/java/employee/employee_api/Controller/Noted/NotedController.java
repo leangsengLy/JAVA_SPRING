@@ -1,18 +1,19 @@
 package employee.employee_api.Controller.Noted;
 
+import employee.employee_api.Dto.Noted.NotedDto;
 import employee.employee_api.Entity.Noted.Noted;
 import employee.employee_api.Exception.ApiResponse;
+import employee.employee_api.Mapper.Noted.NotedMapper;
 import employee.employee_api.Service.Interface.NotedService;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("api/noted")
@@ -32,7 +33,18 @@ public class NotedController {
     public ResponseEntity<?> List(@RequestBody Noted noted) {
         try {
             List<Noted> list =  notedService.getAllNoted();
-            return new ResponseEntity<>(list, HttpStatus.OK);
+            List<NotedDto> listmap = list.stream().map(s-> NotedMapper.toDto(s,list.size())).collect(Collectors.toList());
+            return new ResponseEntity<>(listmap, HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("get_by_id")
+    public ResponseEntity<?> getById(@RequestParam Long id) {
+        try {
+            Noted data =  notedService.getNotedById(id);
+            if(data==null) return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND.value(), "data not found!"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(data, HttpStatus.OK);
         }catch (Exception e) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }

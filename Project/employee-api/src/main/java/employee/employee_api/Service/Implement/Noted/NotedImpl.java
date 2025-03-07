@@ -33,6 +33,7 @@ public class NotedImpl implements NotedService {
     @Override
     public Noted getNotedById(Long id) {
         Optional<Noted> data = repo.findById(id);
+        if(data.isPresent()==false) {return null;}
         return data.get();
     }
 
